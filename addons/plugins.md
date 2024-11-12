@@ -8,10 +8,13 @@ title: "Question2Answer Add-ons - Plugins"
 
 To install a plugin (requires Q2A 1.3 or later), place its directory in Q2A's `qa-plugin` directory, then open the Plugins section of the Admin panel and check it is listed. The plugin may also offer some options on this page.
 
-<small>
-> 🟢 Status: up-to-date | 🔵 Status: Likely up-to-date | 🟡 Status: Hasn't been updated in a while | 🔘 Status: Inactive for a while | 🔴 Status: Unknown.  
-> Note that "*Inactive*" & "*Unknown*" plugins doesn't necessarily mean that they do not work. Some plugins just don't require to be updated as frequently.
-</small>
+<blockquote>
+	<small>
+	🟢 Status: up-to-date | 🔵 Status: Likely up-to-date | 🟡 Status: Hasn't been updated in a while | 🔘 Status: Inactive for a while | 🔴 Status: Unknown.
+	<br>
+	Note that "*Inactive*" & "*Unknown*" themes doesn't necessarily mean that they do not work. Some themes just don't require to be updated as frequently.
+	</small>
+</blockquote>
 
 ## Major features
 
