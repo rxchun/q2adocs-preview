@@ -1,15 +1,85 @@
-<div class="wave-container"></div>
+{% if page.slug == 'homepage' %}
+<div class="wave-container">
+	<svg xmlns="http://www.w3.org/2000/svg" class="docs-svg" viewBox="0 0 1440 170">
+		<path id="n10" fill="#ff773d" fill-opacity="1" d="M0,128L60,117.3C120,107,240,85,360,74.7C480,64,600,64,720,69.3C840,75,960,85,1080,85.3C1200,85,1320,75,1380,69.3L1440,64L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path>
+		<path id="n6" fill="#ff773d" fill-opacity="0.4" d="M0,160L48,154.7C96,149,192,139,288,128C384,117,480,107,576,106.7C672,107,768,117,864,112C960,107,1056,85,1152,85.3C1248,85,1344,107,1392,117.3L1440,128L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+		<path fill="#ff773d" fill-opacity="0.4" d="M0,64L60,85.3C120,107,240,149,360,144C480,139,600,85,720,74.7C840,64,960,96,1080,112C1200,128,1320,128,1380,128L1440,128L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path>
+	</svg>
+</div>
+{% endif %}
 
 <header class="header">
-	<div class="header-logo">
-		<a href="/"><img class="logo-img normal-logo" src="{{ site.baseurl }}/images/question2answer-logo-white-350x40.png" alt="Question2Answer logo"></a>
+	<div class="header-container flex-row">
+		<div class="flex-item logo-container">
+			<div id="main-nav-trigger" class="material-icons mobile-only">menu</div>
+			<a href="{{ base.baseurl }}" class="header-logo">
+				<img class="logo-img normal-logo" src="{{ base.baseurl }}/images/question2answer-logo-350x40.webp" alt="Question2Answer logo">
+				<img class="logo-img white-logo" src="{{ base.baseurl }}/images/question2answer-logo-white-350x40.webp" alt="Question2Answer logo">
+			</a>
+		</div>
+		
+		<nav class="navigation-container flex-item flex-middle no-select">
+			<ul class="nav mega-menu flex-item">
+				<span class="mega-menu-trigger">
+					<span class="nav-item">
+						Documentation
+						<svg xmlns="http://www.w3.org/2000/svg" class="docs-svg" height="24px" width="24px" fill="#5f6368" viewBox="0 -960 960 960"><path d="M480-360 280-560h400L480-360Z"/></svg>
+					</span>
+				</span>
+				
+				<ul class="nav nav-main flex-item display-none">
+					{% for navpage in site.nav.main %}{% capture parent_url %}{{ navpage.path }}{% endcapture %}
+						<li>
+							<span class="nav-item toggleChildren{% if page.url == parent_url %} selected-nav{% endif %}">
+								{{ navpage.name }}
+								<svg xmlns="http://www.w3.org/2000/svg" class="docs-svg" height="24px" width="24px" fill="#5f6368" viewBox="0 -960 960 960"><path d="M480-360 280-560h400L480-360Z"/></svg>
+							</span>
+							{% if navpage.sub %}
+								<ul class="sub-nav display-none">
+									{% for subnavpage in site.nav[navpage.sub] %}{% capture child_url %}{{ subnavpage.path }}{% endcapture %}
+										<li><a href="{{ site.baseurl }}{{ subnavpage.path }}"
+										class="sub-nav-item{% if page.url == child_url %} selected-nav{% endif %}">{{ subnavpage.name }}</a></li>
+									{% endfor %}
+								</ul>
+							{% endif %}
+						</li>
+					{% endfor %}
+				</ul>
+				<ul class="nav nav-main-second flex-item">
+					{% for navpage in site.nav.second %}{% capture parent_url %}{{ navpage.path }}{% endcapture %}
+						<li>
+							<span class="nav-item toggleChildren{% if page.url == parent_url %} selected-nav{% endif %}">
+								{{ navpage.name }}
+								<svg xmlns="http://www.w3.org/2000/svg" class="docs-svg" height="24px" width="24px" fill="#5f6368" viewBox="0 -960 960 960"><path d="M480-360 280-560h400L480-360Z"/></svg>
+							</span>
+							{% if navpage.sub %}
+								<ul class="sub-nav display-none">
+									{% for subnavpage in site.nav[navpage.sub] %}{% capture child_url %}{{ subnavpage.path }}{% endcapture %}
+										<li><a href="{{ site.baseurl }}{{ subnavpage.path }}"
+										class="sub-nav-item{% if page.url == child_url %} selected-nav{% endif %}">{{ subnavpage.name }}</a></li>
+									{% endfor %}
+								</ul>
+							{% endif %}
+						</li>
+					{% endfor %}
+				</ul>
+			</ul>
+			<ul class="nav nav-main-third flex-item">
+				{% for navpage in site.nav.third %}{% capture parent_url %}{{ navpage.path }}{% endcapture %}
+				<li>
+					<a class="nav-item
+					{% if page.url == parent_url %} selected-nav {% endif %}
+					{{ navpage.class | default: '' }}" 
+					href="{% if navpage.url contains 'http' %}{{ navpage.url }}{% else %}{{ site.baseurl }}{{ navpage.url }}{% endif %}">{{ navpage.name }}</a>
+				</li>
+				{% endfor %}
+			</ul>
+		</nav>
+		
+		<div class="darkPane"></div>
 	</div>
-	<nav class="top-nav main-nav">
-		{% for navpage in site.nav.main %}
-			<a class="main-nav-link" href="{{ site.baseurl }}{{ navpage.path }}">{{ navpage.name }}</a>
-		{% endfor %}
-		{% for navpage in site.nav.second %}
-			<a class="main-nav-link {{ navpage.class | default: '' }}" href="{% if navpage.url contains 'http' %}{{ navpage.url }}{% else %}{{ site.baseurl }}{{ navpage.url }}{% endif %}">{{ navpage.name }}</a>
-		{% endfor %}
-	</nav>
 </header>
+
+{% if page.slug != 'homepage' %}
+	{% include breadcrumbs.html %}
+{% endif %}

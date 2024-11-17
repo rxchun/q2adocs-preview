@@ -2,11 +2,24 @@
 layout: default
 ---
 
-<h1 class="home-intro"><strong>Question2Answer</strong> (Q2A) is a popular open source Q&A platform for PHP/MySQL, currently running on <a href="https://www.question2answer.org/sites.php">24,500+ sites in 40 languages</a>.</h1>
 
-{{ content }}
+<div class="home-intro-container">
+	<h1 class="home-intro"><strong>Question2Answer</strong> (Q2A) is a popular open source Q&Aamp; platform for PHP/MySQL, currently running on <a href="https://www.question2answer.org/sites.php">24,500+ sites in 40 languages</a>.</h1>
+</div>
 
-<div class="showcase-cols">
+<div class="notice-container">
+	<div class="notice">
+		<div class="close-notice material-icons">close</div>
+		<div class="notice-image"></div>
+		<div class="notice-text home-intro-card">
+			{{ content }}
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="close-sheet"></div>
+</div>
+
+<article class="showcase-cols">
 
 		{% capture answerText %}
 			<p>A Q&amp;A site helps your online community to share knowledge.
@@ -99,4 +112,4 @@ layout: default
 		{% endcapture %}
 		{% include card-showcase.html icon="translate" title="How can I help?" answer=answerText %}
 
-</div>
+</article>
