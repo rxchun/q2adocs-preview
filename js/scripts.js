@@ -422,14 +422,14 @@ if(gitLinks != null && gitLinks.length) {
 	if(isPluginsPage) {
 		// Calculate number of days until next fetch
 		// if "N" days have passed, or the number of links no longer matches the number of saved links, request Fetch 
-		if(calcDays(pluginsListUpdated) >= daysUntilNextFetch || pluginLinks.length != pluginListLength) {
+		if(!localStorage.q2adocs_gitHub_plugins || calcDays(pluginsListUpdated) >= daysUntilNextFetch || pluginLinks.length != pluginListLength) {
 			fetchLinks();
 		}
 		createTags(retrievedPlugins);
 		// console.log('retrieved Plugins Object: ', retrievedPlugins);
 		// console.log('github plugin links length: '+ pluginLinks.length +'; saved: ' + pluginListLength;
 	} else if (isThemesPage) {
-		if(calcDays(themesListUpdated) >= daysUntilNextFetch || themeLinks.length != themeListLength) {
+		if(!localStorage.q2adocs_gitHub_themes || calcDays(themesListUpdated) >= daysUntilNextFetch || themeLinks.length != themeListLength) {
 			fetchLinks();
 		}
 		createTags(retrievedThemes);
