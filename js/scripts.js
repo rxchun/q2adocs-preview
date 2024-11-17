@@ -140,6 +140,11 @@ const handleClick = e => {
 		}
 	}
 	
+	// Needs Page refresh after fetching
+	if (e.target.className.includes('close-page-status')) {
+		location.reload();
+	}
+	
 	// Notice
 	if (e.target.className.includes('close-notice') || e.target.className.includes('close-sheet')) {
 		noticeContainer.classList.add('display-none');
@@ -241,7 +246,7 @@ function sidebarLinkNav() {
 sidebarLinkNav();
 window.addEventListener('scroll', sidebarLinkNav);
 
-const currentDate = param => {
+const currentDate = () => {
 	const today = new Date();
 	const yyyy = today.getFullYear();
 	const mm = today.getMonth() + 1; // Months start at 0!
@@ -357,6 +362,15 @@ if(gitLinks != null && gitLinks.length) {
 			});
 			
 		} // End of for loop
+		
+		setTimeout(function(){
+			document.querySelector('.page-status-container').innerHTML = '\
+				<div class="page-status">\
+					Contents of this page have been updated and require a page refresh.\
+					<span class="close-page-status material-icons">close</span>\
+				</div>\
+			';
+		}, 2000);
 	}
 	
 	// Get saved data from LocalStorage
@@ -402,16 +416,24 @@ if(gitLinks != null && gitLinks.length) {
 		});
 	}
 	
-	// Get saved list length for Plugins
-	let pluginsListUpdated = singleValue(retrievedPlugins[1])[2];
-	pluginsListUpdated = new Date(pluginsListUpdated).toISOString().split('T')[0];
-	const pluginListLength = singleValue(retrievedPlugins[0])[2];
+	// Start at zero, in case not fetched yet
+	let pluginsListUpdated = currentDate();
+	let pluginListLength = 0;
+	let themesListUpdated = currentDate();
+	let themeListLength = 0;
 	
-	// Get saved list length for Themes
-	let themesListUpdated = singleValue(retrievedThemes[1])[2];
-	themesListUpdated = new Date(themesListUpdated).toISOString().split('T')[0];
-	const themeListLength = singleValue(retrievedThemes[0])[2];
-	
+	if(localStorage.q2adocs_gitHub_plugins) {
+		// Get saved list length for Plugins
+		pluginsListUpdated = singleValue(retrievedPlugins[1])[2];
+		pluginsListUpdated = new Date(pluginsListUpdated).toISOString().split('T')[0];
+		pluginListLength = singleValue(retrievedPlugins[0])[2];
+	}
+	if(localStorage.q2adocs_gitHub_themes) {
+		// Get saved list length for Themes
+		themesListUpdated = singleValue(retrievedThemes[1])[2];
+		themesListUpdated = new Date(themesListUpdated).toISOString().split('T')[0];
+		themeListLength = singleValue(retrievedThemes[0])[2];
+	}
 	// ----------------------------
 	// Create the tags / badges ---
 	// ----------------------------
@@ -419,24 +441,27 @@ if(gitLinks != null && gitLinks.length) {
 	// Test remaining days
 	// console.log('Days passed since Plugins list updated: ' + calcDays(pluginsListUpdated));
 	// console.log('Days passed since Themes list updated: ' + calcDays(themesListUpdated));
-	
-	if(isPluginsPage) {
-		// Calculate number of days until next fetch
-		// if "N" days have passed, or the number of links no longer matches the number of saved links, request Fetch 
-		if(localStorage.q2adocs_gitHub_plugins === null || calcDays(pluginsListUpdated) >= daysUntilNextFetch || pluginLinks.length != pluginListLength) {
-			fetchLinks();
+	const generateTags = () => {
+		if(isPluginsPage) {
+			// Calculate number of days until next fetch
+			// if "N" days have passed, or the number of links no longer matches the number of saved links, request Fetch 
+			if(localStorage.q2adocs_gitHub_plugins === null || calcDays(pluginsListUpdated) >= daysUntilNextFetch || pluginLinks.length != pluginListLength) {
+				fetchLinks();
+			}
+			createTags(retrievedPlugins);
+			// console.log('retrieved Plugins Object: ', retrievedPlugins);
+			// console.log('github plugin links length: '+ pluginLinks.length +'; saved: ' + pluginListLength;
+		} else if (isThemesPage) {
+			if(localStorage.q2adocs_gitHub_themes === null || calcDays(themesListUpdated) >= daysUntilNextFetch || themeLinks.length != themeListLength) {
+				fetchLinks();
+			}
+			createTags(retrievedThemes);
+			// console.log('retrieved Themes Object: ', retrievedThemes);
+			// console.log('github theme links length: '+ themeLinks.length +'; saved: ' + themeListLength;
 		}
-		createTags(retrievedPlugins);
-		// console.log('retrieved Plugins Object: ', retrievedPlugins);
-		// console.log('github plugin links length: '+ pluginLinks.length +'; saved: ' + pluginListLength;
-	} else if (isThemesPage) {
-		if(localStorage.q2adocs_gitHub_themes === null || calcDays(themesListUpdated) >= daysUntilNextFetch || themeLinks.length != themeListLength) {
-			fetchLinks();
-		}
-		createTags(retrievedThemes);
-		// console.log('retrieved Themes Object: ', retrievedThemes);
-		// console.log('github theme links length: '+ themeLinks.length +'; saved: ' + themeListLength;
 	}
+	
+	generateTags();
 	
 } // End of if gitLinks.length
 
