@@ -1,7 +1,7 @@
 # Site settings
 title: Question2Answer documentation
 url: http://docs.question2answer.org
-baseurl: /q2adocs-preview
+baseurl: /q2adocs-preview/
 permalink: pretty
 exclude: [vendor]
 
@@ -35,7 +35,7 @@ nav:
   
   third:
     - name: Services
-      path: /services/
+      url: /services/
     - name: Sites
       url: https://www.question2answer.org/sites.php
     - name: Q&A
