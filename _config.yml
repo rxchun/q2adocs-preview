@@ -1,7 +1,7 @@
 # Site settings
 title: Question2Answer documentation
 url: http://docs.question2answer.org
-baseurl: /q2adocs-preview/
+baseurl: /q2adocs-preview
 permalink: pretty
 exclude: [vendor]
 
