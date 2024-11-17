@@ -64,11 +64,8 @@ if (document.querySelectorAll('.nav-main .selected-nav').length > 0) {
 	document.querySelector('.mega-menu-trigger .nav-item').classList.add('selected-nav');
 }
 // Add selected nav to the top level parent (second nav)
-const nmsecSelected = document.querySelectorAll('.nav-main-second .selected-nav');
-if (nmsecSelected.length > 0) {
-	if(nmsecSelected.closest('.sub-nav').previousElementSibling != null) {
-		nmsecSelected.closest('.sub-nav').previousElementSibling.classList.add('selected-nav');
-	}
+if (document.querySelectorAll('.nav-main-second .selected-nav').length > 0) {
+	document.querySelector('.nav-main-second .selected-nav').closest('.sub-nav').previousElementSibling.classList.add('selected-nav');
 }
 
 // toggle menu children
