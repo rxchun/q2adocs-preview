@@ -1,6 +1,6 @@
 
 // Days until next fetch for Github repository links
-const daysUntilNextFetch = 2;
+const daysUntilNextFetch = 90; // 3 months
 
 class githubList {
     constructor() {
@@ -416,20 +416,21 @@ if(gitLinks != null && gitLinks.length) {
 	// Create the tags / badges ---
 	// ----------------------------
 	
-	console.log('Days passed since Plugins list updated: ' + calcDays(pluginsListUpdated));
-	console.log('Days passed since Themes list updated: ' + calcDays(themesListUpdated));
+	// Test remaining days
+	// console.log('Days passed since Plugins list updated: ' + calcDays(pluginsListUpdated));
+	// console.log('Days passed since Themes list updated: ' + calcDays(themesListUpdated));
 	
 	if(isPluginsPage) {
 		// Calculate number of days until next fetch
 		// if "N" days have passed, or the number of links no longer matches the number of saved links, request Fetch 
-		if(!localStorage.q2adocs_gitHub_plugins || calcDays(pluginsListUpdated) >= daysUntilNextFetch || pluginLinks.length != pluginListLength) {
+		if(localStorage.q2adocs_gitHub_plugins === null || calcDays(pluginsListUpdated) >= daysUntilNextFetch || pluginLinks.length != pluginListLength) {
 			fetchLinks();
 		}
 		createTags(retrievedPlugins);
 		// console.log('retrieved Plugins Object: ', retrievedPlugins);
 		// console.log('github plugin links length: '+ pluginLinks.length +'; saved: ' + pluginListLength;
 	} else if (isThemesPage) {
-		if(!localStorage.q2adocs_gitHub_themes || calcDays(themesListUpdated) >= daysUntilNextFetch || themeLinks.length != themeListLength) {
+		if(localStorage.q2adocs_gitHub_themes === null || calcDays(themesListUpdated) >= daysUntilNextFetch || themeLinks.length != themeListLength) {
 			fetchLinks();
 		}
 		createTags(retrievedThemes);
