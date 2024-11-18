@@ -347,10 +347,12 @@ if(gitLinks != null && gitLinks.length) {
 				console.log(error)
 				// Save Unknowns as well. Prevents null Objects.
 				// We can remove the display tag in the createPluginTags() functions instead, by removing the "else" statement.
-				if(isPluginsPage) {
-					pluginsList.addListLink('plugins', [i], gitLinks[i], 'unknown');
-				} else if (isThemesPage) {
-					themesList.addListLink('themes', [i], gitLinks[i], 'unknown');
+				if(isRepository) {
+					if(isPluginsPage) {
+						pluginsList.addListLink('plugins', [i], gitLinks[i], 'unknown');
+					} else if (isThemesPage) {
+						themesList.addListLink('themes', [i], gitLinks[i], 'unknown');
+					}
 				}
 			})
 			.finally(result => {
@@ -445,14 +447,14 @@ if(gitLinks != null && gitLinks.length) {
 		if(isPluginsPage) {
 			// Calculate number of days until next fetch
 			// if "N" days have passed, or the number of links no longer matches the number of saved links, request Fetch 
-			if(retrievedPlugins === null || calcDays(pluginsListUpdated) >= daysUntilNextFetch || pluginLinks.length != pluginListLength) {
+			if(retrievedPlugins === null || 91 >= daysUntilNextFetch || pluginLinks.length != pluginListLength) {
 				fetchLinks();
 			}
 			createTags(retrievedPlugins);
 			// console.log('retrieved Plugins Object: ', retrievedPlugins);
 			// console.log('github plugin links length: '+ pluginLinks.length +'; saved: ' + pluginListLength;
 		} else if (isThemesPage) {
-			if(retrievedThemes === null || calcDays(themesListUpdated) >= daysUntilNextFetch || themeLinks.length != themeListLength) {
+			if(retrievedThemes === null || 91 >= daysUntilNextFetch || themeLinks.length != themeListLength) {
 				fetchLinks();
 			}
 			createTags(retrievedThemes);
