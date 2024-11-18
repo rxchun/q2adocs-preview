@@ -366,8 +366,8 @@ if(gitLinks != null && gitLinks.length) {
 		setTimeout(function(){
 			document.querySelector('.page-status-container').innerHTML = '\
 				<div class="page-status">\
-					Content on this page have been updated and require a page refresh.\
-					<span class="close-page-status material-icons">close</span>\
+					There has been an update to this page. Please reload.\
+					<span class="close-page-status material-icons" title="Reload this page">refresh</span>\
 				</div>\
 			';
 		}, 2000);
