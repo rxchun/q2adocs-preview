@@ -5,7 +5,7 @@
 <header class="header">
 	<div class="header-container flex-row">
 		<div class="flex-item logo-container">
-			<div id="main-nav-trigger" class="material-icons mobile-only">menu</div>
+			<div id="main-nav-trigger" class="material-icons noSelect mobile-only">menu</div>
 			<a href="{% if site.baseurl == '/' %}{{ site.baseurl }}{% else %}{{ site.baseurl }}/{% endif %}" class="header-logo">
 				<img class="logo-img normal-logo" src="{{ site.baseurl }}/images/question2answer-logo-350x40.webp" alt="Question2Answer logo">
 				{% if page.slug == 'homepage' %}

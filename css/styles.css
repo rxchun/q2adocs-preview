@@ -607,10 +607,6 @@ ul.sub-nav {
     border-radius: 0.5rem;
 }
 
-.page-content .sectionTitle:first-child {
-    margin-top: 0;
-}
-
 #question2answer-plugins ~ ul li,
 #question2answer-themes ~ ul li {
     border-bottom: 1px solid #e0e0e0;
@@ -941,6 +937,9 @@ a[href*="/releases/question2answer"][href$=".zip"]:hover {
     .page-content {
         padding: 3rem;
     }
+	.page-content .sectionTitle:first-child {
+		margin-top: 0;
+	}
     .page-sidebar {
         padding: 2rem 1rem;
     }
@@ -1071,6 +1070,10 @@ a[href*="/releases/question2answer"][href$=".zip"]:hover {
         font-size: 1rem;
         margin-right: .5rem;
     }
+	
+	.page-content {
+        border: none;
+    }
 
     .notice {
         width: 80%;
@@ -1085,10 +1088,6 @@ a[href*="/releases/question2answer"][href$=".zip"]:hover {
     }
     .notice-image {
         height: 100px;
-    }
-
-    .page-content {
-        border: none;
     }
 
 }

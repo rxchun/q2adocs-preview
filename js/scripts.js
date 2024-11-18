@@ -367,7 +367,7 @@ if(gitLinks != null && gitLinks.length) {
 			document.querySelector('.page-status-container').innerHTML = '\
 				<div class="page-status">\
 					There has been an update to this page. Please reload.\
-					<span class="close-page-status material-icons" title="Reload this page">refresh</span>\
+					<span class="close-page-status material-icons noSelect" title="Reload this page">refresh</span>\
 				</div>\
 			';
 		}, 2000);
