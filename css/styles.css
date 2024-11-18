@@ -1050,18 +1050,18 @@ a[href*="/releases/question2answer"][href$=".zip"]:hover {
     }
 
     .template-homepage .home-intro-container {
-        padding: 7rem 2rem 2rem 2rem;
+        padding: 7rem 3rem 2rem 3rem;
     }
     .home-intro {
         font-size: .938rem;
     }
 
     .showcase-cols {
-        grid-gap: 0rem;
+        grid-gap: 1rem;
+		margin: 2rem 1rem;
     }
     .card-showcase {
         padding: 1rem .5rem;
-        margin: .5rem;
     }
     .card-showcase-icon {
         flex: 0 0 35px;
@@ -1070,6 +1070,9 @@ a[href*="/releases/question2answer"][href$=".zip"]:hover {
         font-size: 1rem;
         margin-right: .5rem;
     }
+	.card-showcase-info p {
+		margin-top: .5rem;
+	}
 	
 	.page-content {
         border: none;

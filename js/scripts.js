@@ -8,7 +8,7 @@ class githubList {
 		this.themeList = [];
     }
 
-     addListLink(listType, index, linkInfo, dateInfo) {
+	addListLink(listType, index, linkInfo, dateInfo) {
         // Push object to array, that later will be saved locally
 		if(listType === 'plugins') {
 			this.pluginList.push({id: index.toString(), link: linkInfo.toString(), date: dateInfo.toString()});
@@ -155,7 +155,7 @@ const handleClick = e => {
 } // End handleClick()
 document.addEventListener('click', handleClick);
 
-// Check Notice saved state
+// Deal with Notice saved state
 const q2adocsNotice = localStorage.getItem('q2adocs_notice');
 if (localStorage.q2adocsNotice && noticeContainer != null) {
 	noticeContainer.classList.add('display-none');
