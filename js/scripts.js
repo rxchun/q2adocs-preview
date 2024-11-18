@@ -87,7 +87,7 @@ const handleDropdown = e => {
 	}
 }
 
-const navContainer = document.querySelector('.navigation-container');
+const navContainer = document.querySelector('.nav-container');
 const backgroundSheet = document.querySelector('.darkPane');
 const navMain = document.querySelector('.nav-main');
 const noticeContainer = document.querySelector('.notice-container');
@@ -366,7 +366,7 @@ if(gitLinks != null && gitLinks.length) {
 		setTimeout(function(){
 			document.querySelector('.page-status-container').innerHTML = '\
 				<div class="page-status">\
-					Contents of this page have been updated and require a page refresh.\
+					Content on this page have been updated and require a page refresh.\
 					<span class="close-page-status material-icons">close</span>\
 				</div>\
 			';
@@ -445,14 +445,14 @@ if(gitLinks != null && gitLinks.length) {
 		if(isPluginsPage) {
 			// Calculate number of days until next fetch
 			// if "N" days have passed, or the number of links no longer matches the number of saved links, request Fetch 
-			if(localStorage.q2adocs_gitHub_plugins === null || calcDays(pluginsListUpdated) >= daysUntilNextFetch || pluginLinks.length != pluginListLength) {
+			if(retrievedPlugins === null || calcDays(pluginsListUpdated) >= daysUntilNextFetch || pluginLinks.length != pluginListLength) {
 				fetchLinks();
 			}
 			createTags(retrievedPlugins);
 			// console.log('retrieved Plugins Object: ', retrievedPlugins);
 			// console.log('github plugin links length: '+ pluginLinks.length +'; saved: ' + pluginListLength;
 		} else if (isThemesPage) {
-			if(localStorage.q2adocs_gitHub_themes === null || calcDays(themesListUpdated) >= daysUntilNextFetch || themeLinks.length != themeListLength) {
+			if(retrievedThemes === null || calcDays(themesListUpdated) >= daysUntilNextFetch || themeLinks.length != themeListLength) {
 				fetchLinks();
 			}
 			createTags(retrievedThemes);

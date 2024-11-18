@@ -42,12 +42,13 @@ a:hover, a:active {
 }
 
 
-h1, h2, h3, h4, h5, h6 {
-    color: #424242;
+h1, h2, h3 {
+    font-weight: 500;
 }
 
-h1, h2, h3 {
-    font-weight: 400;
+/*
+h1, h2, h3, h4, h5, h6 {
+    color: #424242;
 }
 
 h1 {
@@ -82,10 +83,12 @@ h5 {
     line-height: 1.5rem;
     margin: 1rem 0 .25rem;
 }
+*/
 
 ul, ol {
-	margin-left: 0;
 	padding-left: 1.8rem;
+	margin-left: 0;
+	margin-bottom: 2em;
 }
 
 img {
@@ -172,6 +175,33 @@ blockquote {
     fill: inherit;
 }
 
+.docs-caret {
+    position: relative;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+	pointer-events: none;
+}
+.docs-caret:before {
+    content: "";
+    display: inline-block;
+    width: 20%;
+    height: 20%;
+    border-right: 2px solid;
+    border-bottom: 2px solid;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-30%) rotate(45deg);
+}
+
+.nav-item:focus .docs-caret:before {
+    width: 40%;
+    border-right: none;
+    transform: translateX(-50%) translateY(-30%) rotate(0deg);
+}
+
 .darkpane, .darkPane, .dark-pane {
     position: fixed;
     background-color: #000;
@@ -213,12 +243,12 @@ body.page {
 
 .wave-container {
 	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 20;
-	width: 100%;
-	height: 170px;
-	pointer-events: none;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 170px;
+    background: transparent url(../images/wave-combo.svg) 20% top / cover no-repeat;
 }
 
 .wave-container .docs-svg path {
@@ -265,6 +295,7 @@ body:not(.template-homepage) .header {
 
 #main-nav-trigger {
     margin-right: 1rem;
+	cursor: pointer;
 }
 
 .logo-container {
@@ -286,6 +317,10 @@ body:not(.template-homepage) .header .header-logo .docs-svg path {
     height: auto;
 }
 
+body:not(.template-homepage) .header .white-logo {
+	display: none;
+}
+
 .template-homepage .normal-logo, .template-homepage .header.sticky .white-logo {
     display: none;
 }
@@ -293,8 +328,13 @@ body:not(.template-homepage) .header .header-logo .docs-svg path {
     display: initial;
 }
 
-.navigation-container {
+.nav-container {
     flex-grow: 1;
+}
+
+.nav-container .header-logo {
+    padding: 1rem;
+    max-width: 175px;
 }
 
 .nav {
@@ -516,7 +556,9 @@ ul.sub-nav {
     fill: #ffffff;
     padding: 1rem 2rem;
     border-radius: 6px;
-    min-width: 24vw;
+    width: max-content;
+	min-width: 24vw;
+	max-width: 95%;
 }
 
 .close-page-status {
@@ -537,8 +579,7 @@ ul.sub-nav {
 }
 
 .template-homepage .home-intro-container {
-    padding-top: 9rem;
-	padding-bottom: 2rem;
+    padding: 9rem 2rem 2rem 2rem;
 }
 
 .docs-container {
@@ -547,7 +588,6 @@ ul.sub-nav {
     max-width: 75.125rem;
     padding: 0 1rem;
     width: 100%;
-    font-size: 16px;
 }
 
 .page-content {
@@ -557,6 +597,10 @@ ul.sub-nav {
 	padding: 0.8rem 1rem;
 	border: 1px solid #dadce0;
 	border-radius: 0.5rem;
+}
+
+.page-content .sectionTitle:first-child {
+    margin-top: 0;
 }
 
 #question2answer-plugins ~ ul li,
@@ -870,6 +914,7 @@ a[href*="/releases/question2answer"][href$=".zip"]:hover {
 		pointer-events: none;
 		background-color: unset;
 	}
+	.mega-menu .nav-main .toggleChildren .docs-caret,
 	.mega-menu .nav-main .toggleChildren .docs-svg {
 		display: none;
 	}
@@ -884,12 +929,9 @@ a[href*="/releases/question2answer"][href$=".zip"]:hover {
 	.page-sidebar-toggle {
 		display: none;
 	}
-	.docs-container {
-		
-	}
 
 	.page-content {
-		padding: 4rem;
+		padding: 3rem;
 	}
 	.page-sidebar {
 		padding: 2rem 1rem;
@@ -916,14 +958,14 @@ a[href*="/releases/question2answer"][href$=".zip"]:hover {
 	.desktop-only {
         display: none;
     }
-	.header .navigation-container {
+	.header .nav-container {
 		color: initial;
 		fill: initial;
 	}
 	.header-container, .footer {
 		padding: 0;
 	}
-	.navigation-container {
+	.nav-container {
 		display: block;
 		position: fixed;
 		top: 0;
@@ -936,22 +978,21 @@ a[href*="/releases/question2answer"][href$=".zip"]:hover {
 		transform: translateX(-100%);
 		transition: transform .25s cubic-bezier(.4,0,.2,1);
 	}
-	.navigation-container.active {
+	.nav-container.active {
         transform: translateX(0%);
     }
-	.navigation-container .nav, .mega-menu {
+	.nav-container .nav, .mega-menu {
 		display: block;
 	}
-	.navigation-container li {
+	.nav-container li {
 		display: block;
 	}
 	.nav-main {
 		border-bottom: 1px solid rgb(0 0 0 / 10%);
-		padding-bottom: 1rem;
-		margin-left: 1rem;
+		padding-bottom: .5rem;
 		margin-bottom: .5rem;
 	}
-	.mega-menu .display-none, .mega-menu .displayNone {
+	.mega-menu-trigger {
 		display: none;
 	}
 	a.nav-item, .nav-item {
@@ -974,18 +1015,53 @@ a[href*="/releases/question2answer"][href$=".zip"]:hover {
 		font-size: .85rem;
 		line-height: 1.4rem;
 	}
+	h1, h2, h3, h4, h5, h6 {
+		line-height: initial;
+	}
+	
 	.header {
 		padding: 0 1rem;
+	}
+	.header-logo {
+		max-width: 130px;
+	}
+	.nav-item:hover .docs-caret:before {
+		width: 40%;
+		border-right: none;
+		transform: translateX(-50%) translateY(-30%) rotate(0deg);
 	}
 	.breadcrumbs {
 		padding: 1rem;
 		line-height: 1.5rem;
 		white-space: initial;
+		border-bottom: 1px solid rgb(0 0 0 / 10%);
 	}
 	.breadcrumb-item:after {
 		height: .5rem;
 		width: .5rem;
 		margin: 0;
+	}
+	
+	.template-homepage .home-intro-container {
+		padding: 7rem 2rem 2rem 2rem;
+	}
+	.home-intro {
+		font-size: .938rem;
+	}
+	
+	.showcase-cols {
+		grid-gap: 0rem;
+	}
+	.card-showcase {
+		padding: 1rem .5rem;
+		margin: .5rem;
+	}
+	.card-showcase-icon {
+		flex: 0 0 35px;
+		width: 35px;
+		height: 35px;
+		font-size: 1rem;
+		margin-right: .5rem;
 	}
 	
 	.notice {
@@ -1003,6 +1079,9 @@ a[href*="/releases/question2answer"][href$=".zip"]:hover {
 		height: 80px;
 	}
 	
+	.page-content {
+		border: none;
+	}
 	
 }
 
@@ -1011,6 +1090,18 @@ a[href*="/releases/question2answer"][href$=".zip"]:hover {
 		width: 50%;
 		margin: .5rem auto;
 		text-align: center;
+	}
+}
+
+@media (max-width: 475px) {
+	.page-content {
+		padding: 0;
+	}
+	#question2answer-plugins ~ ul, #question2answer-themes ~ ul {
+		padding-left: 1rem;
+	}
+	.page-status {
+		padding: .6rem 1rem;
 	}
 }
 
