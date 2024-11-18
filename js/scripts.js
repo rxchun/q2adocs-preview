@@ -358,13 +358,13 @@ if(gitLinks != null && gitLinks.length) {
 				}
 			});
 			
-		} // End of for loop 
+		} // End of for loop
 		
 		setTimeout(function(){
 			document.querySelector('.page-status-container').innerHTML = '\
 				<div class="page-status">\
 					<div>\
-						<span class="twbb">This page has been updated.</span>\
+						<span class="twbb">There has been an update to this page.</span>\
 						<span class="twbb">Please reload.</span>\
 					</div>\
 					<span class="close-page-status material-icons noSelect" title="Reload this page">refresh</span>\
