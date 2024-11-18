@@ -452,14 +452,14 @@ if(gitLinks != null && gitLinks.length) {
 			}
 			createTags(retrievedPlugins);
 			// console.log('retrieved Plugins Object: ', retrievedPlugins);
-			// console.log('github plugin links length: '+ pluginLinks.length +'; saved: ' + pluginListLength;
+			// console.log('github plugin links length: '+ pluginLinks.length +'; saved: ' + pluginListLength);
 		} else if (isThemesPage) {
 			if(retrievedThemes === null || calcDays(themesListUpdated) >= daysUntilNextFetch || themeLinks.length != themeListLength) {
 				fetchLinks();
 			}
 			createTags(retrievedThemes);
 			// console.log('retrieved Themes Object: ', retrievedThemes);
-			// console.log('github theme links length: '+ themeLinks.length +'; saved: ' + themeListLength;
+			// console.log('github theme links length: '+ themeLinks.length +'; saved: ' + themeListLength);
 		}
 	}
 	
