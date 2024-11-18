@@ -358,7 +358,7 @@ if(gitLinks != null && gitLinks.length) {
 				}
 			});
 			
-		} // End of for loop
+		} // End of for loop 
 		
 		setTimeout(function(){
 			document.querySelector('.page-status-container').innerHTML = '\
