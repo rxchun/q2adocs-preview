@@ -227,7 +227,7 @@ window.addEventListener('scroll', handleScroll);
 
 // Docs Navigation
 const articleHeaders = document.querySelectorAll('\
-	.page-content h1, .page-content h2, .page-content h3, .page-content h4, .page-content h5, .page-content h6\
+    .page-content h1, .page-content h2, .page-content h3, .page-content h4, .page-content h5, .page-content h6\
 ');
 const docsNav = document.querySelector('.docs-nav');
 
@@ -315,7 +315,7 @@ const pluginLinks = document.querySelectorAll('.template-addons-plugins .page-co
 const themeLinks = document.querySelectorAll('.template-addons-themes .page-content li a[href*="https://github.com/"]');
 
 if(gitLinks != null && gitLinks.length) {
-	
+    
     const pluginsList = new githubList();
     const themesList = new githubList();
     const isPluginsPage = (document.querySelector('.template-addons-plugins') != null ? true : false);
@@ -323,9 +323,9 @@ if(gitLinks != null && gitLinks.length) {
 
     // Set outside Fetch, because it will be reused for other functions
     const githubDomain = 'https://github.com/';
-	
-	// Fetch Links
-	const fetchLinks = () => {
+    
+    // Fetch Links
+    const fetchLinks = () => {
 
         // Get Q2A version
         let q2aVersion;
@@ -411,8 +411,8 @@ if(gitLinks != null && gitLinks.length) {
             </div>\
             ';
         }, 1500);
-	}
-	
+    }
+    
     // Get saved data from LocalStorage
     const retrievedPlugins = JSON.parse(localStorage.getItem('q2adocs_gitHub_plugins'));
     const retrievedThemes = JSON.parse(localStorage.getItem('q2adocs_gitHub_themes'));
@@ -424,8 +424,8 @@ if(gitLinks != null && gitLinks.length) {
     const singleValue = (storage)  => {
         return Object.values(storage);
     }
-	
-	// Change Emoji colors for actual color element
+    
+    // Change Emoji colors for actual color element
     const colorLegends = document.querySelector('.template-addons-plugins blockquote, .template-addons-themes blockquote');
     const colorLegendsUpdated = colorLegends.innerHTML.replace(
         '🟢','<span class="rep-date rep-date-1"></span>'
@@ -439,13 +439,13 @@ if(gitLinks != null && gitLinks.length) {
         '🔘','<span class="rep-date"></span>'
     );
     colorLegends.innerHTML = colorLegendsUpdated;
-	
-	// Create tags for both - Plugins and Themes
-	const createTags = (param) => {
-		
-		// get stored current Q2A version
-		const currentQ2aVersion = Object.values(param[0] || {} )[3];
-		
+    
+    // Create tags for both - Plugins and Themes
+    const createTags = (param) => {
+        
+        // get stored current Q2A version
+        const currentQ2aVersion = Object.values(param[0] || {} )[3];
+        
         param.forEach((item, index) => {
 
             const list = param.slice(2); // Remove list header (metadata) indexes
@@ -511,8 +511,8 @@ if(gitLinks != null && gitLinks.length) {
             }
         });
         // console.log(JSON.parse(localStorage.getItem('q2adocs_gitHub_plugins')));
-	}
-	
+    }
+    
     // Start at zero, in case not fetched yet
     let pluginsListUpdated = currentDate();
     let pluginListLength = 0;
@@ -532,14 +532,14 @@ if(gitLinks != null && gitLinks.length) {
         themesListUpdated = new Date(themesListUpdated).toISOString().split('T')[0];
         themeListLength = singleValue(retrievedThemes[0])[2];
     }
-	
-	// ----------------------------
-	// Create the tags / badges ---
-	// ----------------------------
-	
-	// Test remaining days
-	// console.log('Days passed since Plugins list updated: ' + calcDays(pluginsListUpdated));
-	// console.log('Days passed since Themes list updated: ' + calcDays(themesListUpdated));
+    
+    // ----------------------------
+    // Create the tags / badges ---
+    // ----------------------------
+    
+    // Test remaining days
+    // console.log('Days passed since Plugins list updated: ' + calcDays(pluginsListUpdated));
+    // console.log('Days passed since Themes list updated: ' + calcDays(themesListUpdated));
     const generateTags = () => {
         if(isPluginsPage) {
             // Calculate number of days until next fetch
@@ -559,9 +559,9 @@ if(gitLinks != null && gitLinks.length) {
             // console.log('github theme links length: '+ themeLinks.length +'; saved: ' + themeListLength);
         }
     }
-	
+    
     generateTags();
-	
+    
 } // End of if gitLinks.length
 
 
