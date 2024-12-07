@@ -423,8 +423,7 @@ ul.sub-nav {
 .header ul.sub-nav {
     top: 40px;
 }
-.mega-menu .nav-main:before, 
-.header .nav-main-second ul.sub-nav:before {
+.mega-menu .nav-main:before, .header ul.sub-nav:before {
     content: '';
     position: absolute;
     left: 30px;
@@ -1090,13 +1089,14 @@ a[href*="/releases/question2answer"][href$=".zip"]:hover {
     }
     .sub-nav .sub-nav-item, .sub-nav a.sub-nav-item {
         line-height: 24px;
-        padding: .5rem 1rem;
-        border-radius: 0;
+        padding: .5rem 1rem .5rem 2rem;
+        border-radius: 0 !important;
+        font-weight: 500;
     }
     .header ul.sub-nav:after {
         content: "";
         position: fixed;
-        top: 60px;
+        top: 50px;
         left: 0;
         right: 0;
         bottom: 0;
