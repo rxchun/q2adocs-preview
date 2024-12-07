@@ -1088,6 +1088,11 @@ a[href*="/releases/question2answer"][href$=".zip"]:hover {
     .nav-item .docs-svg {
         vertical-align: text-bottom;
     }
+    .mega-menu .nav-main .sub-nav-item {
+        line-height: 24px;
+        padding: .5rem 1rem;
+        border-radius: 0;
+    }
 
     .jump-top-container {
         padding-bottom: 2rem;
