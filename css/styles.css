@@ -1087,11 +1087,8 @@ a[href*="/releases/question2answer"][href$=".zip"]:hover {
     .nav-item .docs-svg {
         vertical-align: text-bottom;
     }
-    .sub-nav .sub-nav-item, .sub-nav a.sub-nav-item {
-        line-height: 24px;
-        padding: .5rem 1rem .5rem 2rem;
-        border-radius: 0 !important;
-        font-weight: 500;
+    ul.sub-nav {
+        box-shadow: 0 2px 10px 0 rgb(0 0 0 / 30%);
     }
     .header ul.sub-nav:after {
         content: "";
@@ -1104,6 +1101,12 @@ a[href*="/releases/question2answer"][href$=".zip"]:hover {
         height: 100vh;
         background-color: #fff;
         opacity: .5;
+    }
+    .sub-nav .sub-nav-item, .sub-nav a.sub-nav-item {
+        line-height: 24px;
+        padding: .5rem 1rem .5rem 2rem;
+        border-radius: 0 !important;
+        font-weight: 500;
     }
 
     .jump-top-container {
