@@ -235,9 +235,11 @@ blockquote {
     clear: both;
 }
 
+.nav-container .nav > li {
+    transition: opacity .05s linear;
+}
 .obfuscate {
     opacity: .5;
-    transition: opacity .05s linear;
 }
 
 
