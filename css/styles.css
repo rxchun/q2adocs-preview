@@ -237,6 +237,7 @@ blockquote {
 
 .obfuscate {
     opacity: .5;
+    transition: opacity .05s linear;
 }
 
 
