@@ -9,7 +9,7 @@ slug: addons-plugins
 
 To install a plugin (requires Q2A 1.3 or later), place its directory in Q2A's `qa-plugin` directory, then open the Plugins section of the Admin panel and check it is listed. The plugin may also offer some options on this page.
 
-> Inactive & "*Unknown*" marked plugins doesn't necessarily mean that they do not work. Some plugins just don't require to be updated as frequently. Look for the "Tested with" tag as well to see if the author, maintainer, or its contributors, have tested their compatibility with the latest versions of Q2A as well.
+> Note that inactive & "*Unknown*" marked plugins doesn't necessarily mean that they do not work. Some plugins just don't require to be updated as frequently. Look for the "Tested with" tag as well to see if the author, maintainer, or its contributors, have tested their compatibility with the latest versions of Q2A as well.
 
 ## Major features
 
