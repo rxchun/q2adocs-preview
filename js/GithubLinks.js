@@ -8,24 +8,21 @@ class githubList {
         this.themeList = [];
     }
     
-    addListLink(listType, index, linkInfo, dateInfo, q2aVersion) {
-        // Push object to array, that later will be saved locally
-        if(listType === 'plugins') {
-            this.pluginList.push({
-                id: index.toString(),
-                link: linkInfo.toString(),
-                date: dateInfo.toString(),
-                max_q2a: q2aVersion.toString()
-            });
-        } else {
-            this.themeList.push({
-                id: index.toString(),
-                link: linkInfo.toString(),
-                date: dateInfo.toString(),
-                max_q2a: q2aVersion.toString()
-            });
-        }
-    }
+	addListLink(listType, entry) {
+		const formattedEntry = {
+			id: entry.id?.toString() || '',
+			link: entry.link?.toString() || '',
+			date: entry.date?.toString() || '',
+			max_q2a: entry.max_q2a?.toString() || '',
+			type: entry.type || 'repository'
+		};
+
+		if (listType === 'plugins') {
+			this.pluginList.push(formattedEntry);
+		} else {
+			this.themeList.push(formattedEntry);
+		}
+	}
     
     // Store Repositories locally
     savePluginsList() {
@@ -98,106 +95,162 @@ const gitLinks = document.querySelectorAll(`
 const pluginLinks = document.querySelectorAll('.template-addons-plugins .page-content li a[href*="https://github.com/"]');
 const themeLinks = document.querySelectorAll('.template-addons-themes .page-content li a[href*="https://github.com/"]');
 
-if(gitLinks != null && gitLinks.length) {
+if (gitLinks != null && gitLinks.length) {
     
     const pluginsList = new githubList();
     const themesList = new githubList();
     const isPluginsPage = (document.querySelector('.template-addons-plugins') != null ? true : false);
     const isThemesPage = (document.querySelector('.template-addons-themes') != null ? true : false);
     
-    // Set outside Fetch, because it will be reused for other functions
-    const githubDomain = 'https://github.com/';
-    
-    // Fetch Links
-    // Async would take longer to update the page, due to dozens of broken links.
-    // They'd need to wait for the response back from each broken request, to move to the next link.
+    /**
+	 * Adds an entry to the appropriate list (plugins or themes) with repository type.
+	 *
+	 * @param {string} pageType - Indicates the type of page ('plugins' or 'themes').
+	 * @param {string} listType - The type of list the entry should be added to ('plugins' or 'themes').
+	 * @param {Object} entry - The entry object containing id, link, date, and max_q2a.
+	 */
+	const addFetchedLinkToList = (pageType, listType, entry) => {
+		const list = pageType === 'plugins' ? pluginsList : themesList;
+		list.addListLink(listType, entry);
+	}
+	
+	// Get current Q2A version
+	const getQ2aVersion = async () => {
+		try {
+			const res = await fetch('https://raw.githubusercontent.com/q2a/question2answer/master/VERSION.txt');
+			if (res.ok) {
+				const text = await res.text();
+				return text.trim();
+			}
+		} catch (e) {
+			console.warn('Failed to fetch Q2A version:', e);
+		}
+		return '0'; // fallback
+	};
+	
+	/**
+	 * Fetch Links - Fetches metadata for all GitHub plugin/theme links on the current page.
+	 *
+	 * - Attempts to retrieve each repository's `metadata.json` file.
+	 * - Stores successful and failed responses (with fallback "unknown" values) into localStorage.
+	 * - Adds metadata headers for list length and last updated date.
+	 * - Immediately calls `createTags()` to render tags based on the fetched data.
+	 * - Uses a fast-fail approach for broken URLs to speed up processing.
+	 *
+	 * This ensures future page loads are faster by caching both good and broken links,
+	 * and avoids re-fetching unchanged data.
+	 */
+    const fetchLinks = async () => {
+		const githubDomain = 'https://github.com/';
+		const fetchPromises = [];
+		const tempList = [];
 
-    // Since most old plugins aren't going to be updated, we store their "bad" information as well for display.
-    // Making it faster to update the page, when fetching.
-    const fetchLinks = () => {
-        
-        // Get Q2A version
-        let q2aVersion;
-        const getQ2aVersion = 'https://raw.githubusercontent.com/q2a/question2answer/master/VERSION.txt';
-        let rawFile = new XMLHttpRequest();
-        rawFile.open('GET', getQ2aVersion, false);
-        rawFile.onreadystatechange = () => {
-            if(rawFile.readyState === 4) {
-                if(rawFile.status === 200 || rawFile.status == 0) {
-                    q2aVersion = rawFile.responseText;
-                }
-            }
-        }
-        rawFile.send(null);
-        
-        // Set list headers
-        if(isPluginsPage) {
-            pluginsList.addListLink('plugins', 'metadata_list_size', 'List_length', pluginLinks.length, q2aVersion);
-            pluginsList.addListLink('plugins', 'metadata_list_updated', 'updated', new Date(), q2aVersion);
-        } else if (isThemesPage) {
-            themesList.addListLink('themes', 'metadata_list_size', 'List_length', themeLinks.length, q2aVersion);
-            themesList.addListLink('themes', 'metadata_list_updated', 'updated', new Date(), q2aVersion);
-        }
-        
-        // Create list
-        for(let i=0; i<gitLinks.length; i++) {
-            
-            const getGithubHref = gitLinks[i].getAttribute('href');
-            const githubRepository = getGithubHref.slice(getGithubHref.indexOf(githubDomain) + githubDomain.length);
-            const githubJSON = 'https://raw.githubusercontent.com/' + githubRepository + '/master/metadata.json';
-            
-            // Checks if the Link has more than 4 'forward slashes', AKA a repository, to escape Github user profiles
-            let isRepository = (getGithubHref.match(/\//g) || []).length >= 4;
-            
-            fetch(githubJSON)
-                .then(res => res.json())
-                .then(jsonResponse => {
-                if(isRepository) {
-                    // Add link to list
-                    const getQ2aVersion = (jsonResponse.max_q2a != null) ? jsonResponse.max_q2a : '0';
-                    
-                    if(isPluginsPage) {
-                        pluginsList.addListLink('plugins', [i], gitLinks[i], jsonResponse.date, getQ2aVersion);
-                    } else if (isThemesPage) {
-                        themesList.addListLink('themes', [i], gitLinks[i], jsonResponse.date, getQ2aVersion);
-                    }
-                }
-            })
-            .catch(error => {
-                console.log(error)
-                // Save Unknowns as well. Prevents null Objects.
-                // We can remove the display tag in the createTags() functions instead, 
-                // if necessary, by removing the "else" statement.
-                if(isRepository) {
-                    if(isPluginsPage) {
-                        pluginsList.addListLink('plugins', [i], gitLinks[i], 'unknown', '0');
-                    } else if (isThemesPage) {
-                        themesList.addListLink('themes', [i], gitLinks[i], 'unknown', '0');
-                    }
-                }
-            })
-            .finally(result => {
-                if(isPluginsPage) {
-                    pluginsList.savePluginsList();
-                } else {
-                    themesList.saveThemesList();
-                }
-            });
-        
-        } // End of for loop
-        
-        setTimeout(() => {
-            document.querySelector('.page-status-container').innerHTML = `
-            <div class="page-status">
-                <div>
-                    <span class="twbb">This page has been updated.</span>
-                    <span class="twbb">Please reload.</span>
-                </div>
-                <span class="close-page-status material-icons noSelect" title="Reload this page">refresh</span>
-            </div>
-            `;
-        }, 1500);
-    }
+		const q2aVersion = await getQ2aVersion();
+
+		// Set list headers
+		if (isPluginsPage) {
+			pluginsList.addListLink('plugins', {
+				id: 'metadata_list_size',
+				link: 'List_length',
+				date: pluginLinks.length,
+				max_q2a: q2aVersion,
+				type: 'metadata'
+			});
+			pluginsList.addListLink('plugins', {
+				id: 'metadata_list_updated',
+				link: 'updated',
+				date: new Date().toISOString(),
+				max_q2a: q2aVersion,
+				type: 'metadata'
+			});
+		} else if (isThemesPage) {
+			themesList.addListLink('themes', {
+				id: 'metadata_list_size',
+				link: 'List_length',
+				date: themeLinks.length,
+				max_q2a: q2aVersion,
+				type: 'metadata'
+			});
+			themesList.addListLink('themes', {
+				id: 'metadata_list_updated',
+				link: 'updated',
+				date: new Date().toISOString(),
+				max_q2a: q2aVersion,
+				type: 'metadata'
+			});
+		}
+
+		for (let i = 0; i < gitLinks.length; i++) {
+			const href = gitLinks[i].getAttribute('href');
+			const repoPath = href.slice(href.indexOf(githubDomain) + githubDomain.length);
+			const metadataURL = `https://raw.githubusercontent.com/${repoPath}/master/metadata.json`;
+			const isRepository = (href.match(/\//g) || []).length >= 4;
+			
+			// Add a placeholder, while the content is being loaded
+			if (gitLinks[i] && gitLinks[i].parentElement) {
+				gitLinks[i].parentElement.insertAdjacentHTML(
+					'beforeend',
+					`<span class="repository-footer loading-placeholder">
+						<span class="rf-item">Loading repository data...</span>
+					</span>`
+				);
+			}
+			
+			const fetchPromise = fetch(metadataURL)
+				.then(res => res.ok ? res.json() : Promise.reject('404'))
+				.then(data => {
+					const maxQ2a = data.max_q2a || '0';
+					const entry = {
+						id: i.toString(),
+						link: href,
+						date: data.date || 'unknown',
+						max_q2a: maxQ2a
+					};
+					tempList.push(entry);
+					
+					// Add to the list to be saved
+					if (isPluginsPage) {
+						addFetchedLinkToList('plugins', 'plugins', entry);
+					} else if (isThemesPage) {
+						addFetchedLinkToList('themes', 'themes', entry);
+					}
+				})
+				.catch(() => {
+					if (isRepository) {
+						const entry = {
+							id: i.toString(),
+							link: href.toString(),
+							date: 'unknown',
+							max_q2a: '0',
+							type: 'repository'
+						};
+						tempList.push(entry);
+						
+						// Add to the list to be saved
+						if (isPluginsPage) {
+							addFetchedLinkToList('plugins', 'plugins', entry);
+						} else if (isThemesPage) {
+							addFetchedLinkToList('themes', 'themes', entry);
+						}
+					}
+				});
+
+			fetchPromises.push(fetchPromise);
+		}
+
+		Promise.all(fetchPromises).then(() => {
+			// Save to localStorage
+			if (isPluginsPage) {
+				pluginsList.savePluginsList();
+				// console.log('Fetched and saved plugin list');
+				createTags(pluginsList.pluginList);
+			} else if (isThemesPage) {
+				themesList.saveThemesList();
+				// console.log('Fetched and saved theme list');
+				createTags(themesList.themeList);
+			}
+		});
+	};
 
     // Get saved data from LocalStorage
     const retrievedPlugins = pluginsList.getList('q2adocs_github_plugins');
@@ -205,7 +258,6 @@ if(gitLinks != null && gitLinks.length) {
     
     // Create tags for both - Plugins and Themes
     const createTags = (param) => {
-        
         if (param) {
             // Get the stored value for Q2A current version
             const currentQ2aVersion = param[0].max_q2a;
@@ -229,21 +281,27 @@ if(gitLinks != null && gitLinks.length) {
                 const date = Object.values(list[index] || {} )[2];
                 const max_q2a = Object.values(list[index] || {} )[3];
                 
-                // console.log(`${id} === ${link} === ${date}`);
+                // Uncomment to check if list is being stored correctly
+				// console.log(`${id} === ${link} === ${date}`);
                 
-                if(id != null && gitLinks[id].parentElement.innerHTML.includes('➔')){
+                if (id != null && gitLinks[id].parentElement.innerHTML.includes('➔')){
                     gitLinks[id].closest('li').classList.add('child-repository');
                 }
                 
-                if(id != null && link != null && date != null && max_q2a != null) {
-                    // Preppend based on stored id/index, because DOM link order may not be accurate when looping
+                if (id != null && link != null && date != null && max_q2a != null) {
+                    
+					// Remove Placeholder
+					const placeholder = gitLinks[id].parentElement.querySelector('.repository-footer.loading-placeholder');
+					if (placeholder) placeholder.remove();
+					
+					// Preppend based on stored id/index, because DOM link order may not be accurate when looping
                     // index order will be updated when information is fetched again
                     
                     const yearGapClass = 'rep-date-' + calcYears(date);
                     
                     if (date != 'unknown') {
                         // if 'max_q2a' key is available
-                        if(max_q2a != '0') {
+                        if (max_q2a != '0') {
                             gitLinks[id].parentElement.insertAdjacentHTML(
                                 'beforeend',
                                 `<span class="repository-footer">
@@ -286,55 +344,85 @@ if(gitLinks != null && gitLinks.length) {
                             </span>`,
                         );
                     }
-                } // close if() null
+                } // close if () null
             });
         }
     } // close createTags()
     
-    // Start at zero, in case not fetched yet
+    // Start "ListLength" at zero, in case not fetched yet
     let pluginsListUpdated = currentDate();
     let pluginListLength = 0;
     
     let themesListUpdated = currentDate();
     let themeListLength = 0;
+	
+    const getMetadataValue = (list, key) => list.find(e => e.type === 'metadata' && e.id === key)?.date;
+
+	if (retrievedPlugins?.length) {
+		try {
+			const rawDate = getMetadataValue(retrievedPlugins, 'metadata_list_updated');
+			const parsedDate = new Date(rawDate);
+			pluginsListUpdated = !isNaN(parsedDate) ? parsedDate.toISOString().split('T')[0] : currentDate().join('-');
+			pluginListLength = parseInt(getMetadataValue(retrievedPlugins, 'metadata_list_size'), 10) || 0;
+		} catch {
+			pluginsListUpdated = currentDate().join('-');
+			pluginListLength = 0;
+		}
+	}
+
+	if (retrievedThemes?.length) {
+		try {
+			const rawDate = getMetadataValue(retrievedThemes, 'metadata_list_updated');
+			const parsedDate = new Date(rawDate);
+			themesListUpdated = !isNaN(parsedDate) ? parsedDate.toISOString().split('T')[0] : currentDate().join('-');
+			themeListLength = parseInt(getMetadataValue(retrievedThemes, 'metadata_list_size'), 10) || 0;
+		} catch {
+			themesListUpdated = currentDate().join('-');
+			themeListLength = 0;
+		}
+	}
     
-    if(localStorage.q2adocs_github_plugins) {
-        // Get saved list length for Plugins
-        pluginsListUpdated = retrievedPlugins[1].date;
-        pluginsListUpdated = new Date(pluginsListUpdated).toISOString().split('T')[0];
-        pluginListLength = retrievedPlugins[0].date
-    }
-    if(localStorage.q2adocs_github_themes) {
-        // Get saved list length for Themes
-        themesListUpdated = retrievedThemes[1].date;
-        themesListUpdated = new Date(themesListUpdated).toISOString().split('T')[0];
-        themeListLength = retrievedThemes[0].date;
-    }
     
     // ----------------------------
     // Create the tags / badges ---
     // ----------------------------
     
-    // Test remaining days
+	/**
+	 * Initializes repository tag rendering for plugin or theme pages.
+	 *
+	 * - Checks if data in localStorage is fresh and matches the number of GitHub links on the page.
+	 * - If data is outdated, missing, or the list length has changed, triggers a fresh fetch via `fetchLinks()`.
+	 * - Otherwise, uses cached data from localStorage to immediately render tags with `createTags()`.
+	 */
+    const createFooters = () => {
+		if (isPluginsPage) {
+			const shouldFetch = (
+				retrievedPlugins === null ||
+				calcDays(pluginsListUpdated) >= daysUntilNextFetch ||
+				pluginLinks.length != pluginListLength
+			);
+			if (shouldFetch) {
+				fetchLinks(); // fetchLinks will handle createTags
+			} else {
+				createTags(retrievedPlugins); // only use local data if not fetching
+			}
+		} else if (isThemesPage) {
+			const shouldFetch = (
+				retrievedThemes === null ||
+				calcDays(themesListUpdated) >= daysUntilNextFetch ||
+				themeLinks.length != themeListLength
+			);
+			if (shouldFetch) {
+				fetchLinks();
+			} else {
+				createTags(retrievedThemes);
+			}
+		}
+	};
+	
+	// Test remaining days
     // console.log('Days passed since Plugins list updated: ' + calcDays(pluginsListUpdated));
     // console.log('Days passed since Themes list updated: ' + calcDays(themesListUpdated));
-    const createFooters = () => {
-        if(isPluginsPage) {
-            // Calculate number of days until next fetch
-            // if "N" days have passed, or the number of links no longer matches the number of saved links, request Fetch
-            if(retrievedPlugins === null || calcDays(pluginsListUpdated) >= daysUntilNextFetch || pluginLinks.length != pluginListLength) {
-                fetchLinks();
-            }
-            createTags(retrievedPlugins);
-            // console.log('retrieved Plugins Object: ', retrievedPlugins);
-        } else if (isThemesPage) {
-            if(retrievedThemes === null || calcDays(themesListUpdated) >= daysUntilNextFetch || themeLinks.length != themeListLength) {
-                fetchLinks();
-            }
-            createTags(retrievedThemes);
-            // console.log('retrieved Themes Object: ', retrievedThemes);
-        }
-    }
     createFooters();
     
 } // End of if gitLinks.length
